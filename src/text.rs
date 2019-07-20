@@ -1,9 +1,9 @@
 //! Draw text
 
-use types::{Color, FontSize};
-use {color, Image, Graphics, Transformed, DrawState};
 use character::CharacterCache;
 use math::Matrix2d;
+use types::{Color, FontSize};
+use {color, DrawState, Graphics, Image, Transformed};
 
 /// Renders text
 #[derive(Copy, Clone)]
@@ -42,15 +42,17 @@ impl Text {
     }
 
     /// Draws text with a character cache
-    pub fn draw<C, G>(&self,
-                      text: &str,
-                      cache: &mut C,
-                      draw_state: &DrawState,
-                      transform: Matrix2d,
-                      g: &mut G)
-                      -> Result<(), C::Error>
-        where C: CharacterCache,
-              G: Graphics<Texture = <C as CharacterCache>::Texture>
+    pub fn draw<C, G>(
+        &self,
+        text: &str,
+        cache: &mut C,
+        draw_state: &DrawState,
+        transform: Matrix2d,
+        g: &mut G,
+    ) -> Result<(), C::Error>
+    where
+        C: CharacterCache,
+        G: Graphics<Texture = <C as CharacterCache>::Texture>,
     {
         let mut image = Image::new_color(self.color);
 
@@ -65,13 +67,17 @@ impl Text {
                 ch_y = ch_y.round();
             }
             image = image.src_rect([
-                character.atlas_offset[0], character.atlas_offset[1],
-                character.atlas_size[0], character.atlas_size[1]
+                character.atlas_offset[0],
+                character.atlas_offset[1],
+                character.atlas_size[0],
+                character.atlas_size[1],
             ]);
-            image.draw(character.texture,
-                       draw_state,
-                       transform.trans(ch_x, ch_y),
-                       g);
+            image.draw(
+                character.texture,
+                draw_state,
+                transform.trans(ch_x, ch_y),
+                g,
+            );
             x += character.advance_width();
             y += character.advance_height();
         }

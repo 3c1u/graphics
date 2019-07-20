@@ -1,12 +1,11 @@
 //! Draw an image
 
-use types::{Color, Rectangle, SourceRectangle};
+use math::Matrix2d;
 use triangulation;
+use types::{Color, Rectangle, SourceRectangle};
+use DrawState;
 use Graphics;
 use ImageSize;
-use DrawState;
-use math::Matrix2d;
-
 
 /// An image
 ///
@@ -121,23 +120,27 @@ impl Image {
 
     /// Draws image using default method.
     #[inline(always)]
-    pub fn draw<G>(&self,
-                   texture: &<G as Graphics>::Texture,
-                   draw_state: &DrawState,
-                   transform: Matrix2d,
-                   g: &mut G)
-        where G: Graphics
+    pub fn draw<G>(
+        &self,
+        texture: &<G as Graphics>::Texture,
+        draw_state: &DrawState,
+        transform: Matrix2d,
+        g: &mut G,
+    ) where
+        G: Graphics,
     {
         g.image(self, texture, draw_state, transform);
     }
 
     /// Draws image using triangulation.
-    pub fn draw_tri<G>(&self,
-                       texture: &<G as Graphics>::Texture,
-                       draw_state: &DrawState,
-                       transform: Matrix2d,
-                       g: &mut G)
-        where G: Graphics
+    pub fn draw_tri<G>(
+        &self,
+        texture: &<G as Graphics>::Texture,
+        draw_state: &DrawState,
+        transform: Matrix2d,
+        g: &mut G,
+    ) where
+        G: Graphics,
     {
         use math::Scalar;
 
@@ -146,27 +149,39 @@ impl Image {
             let (w, h) = texture.get_size();
             [0.0, 0.0, w as Scalar, h as Scalar]
         });
-        let rectangle = self.rectangle
-            .unwrap_or([0.0, 0.0, source_rectangle[2] as Scalar, source_rectangle[3] as Scalar]);
+        let rectangle = self.rectangle.unwrap_or([
+            0.0,
+            0.0,
+            source_rectangle[2] as Scalar,
+            source_rectangle[3] as Scalar,
+        ]);
         g.tri_list_uv(draw_state, &color, texture, |f| {
-            f(&triangulation::rect_tri_list_xy(transform, rectangle),
-              &triangulation::rect_tri_list_uv(texture, source_rectangle))
+            f(
+                &triangulation::rect_tri_list_xy(transform, rectangle),
+                &triangulation::rect_tri_list_uv(texture, source_rectangle),
+            )
         });
     }
 }
 
 /// Draws many images.
-pub fn draw_many<G>(rects: &[(Rectangle, SourceRectangle)],
-                    color: Color,
-                    texture: &<G as Graphics>::Texture,
-                    draw_state: &DrawState,
-                    transform: Matrix2d,
-                    g: &mut G)
-    where G: Graphics
+pub fn draw_many<G>(
+    rects: &[(Rectangle, SourceRectangle)],
+    color: Color,
+    texture: &<G as Graphics>::Texture,
+    draw_state: &DrawState,
+    transform: Matrix2d,
+    g: &mut G,
+) where
+    G: Graphics,
 {
-    g.tri_list_uv(draw_state, &color, texture, |f| for r in rects {
-        f(&triangulation::rect_tri_list_xy(transform, r.0),
-          &triangulation::rect_tri_list_uv(texture, r.1))
+    g.tri_list_uv(draw_state, &color, texture, |f| {
+        for r in rects {
+            f(
+                &triangulation::rect_tri_list_xy(transform, r.0),
+                &triangulation::rect_tri_list_uv(texture, r.1),
+            )
+        }
     });
 }
 

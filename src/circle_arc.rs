@@ -1,7 +1,7 @@
 //! Draw an arc
 
-use {triangulation, DrawState, Graphics};
 use math::Matrix2d;
+use {triangulation, DrawState, Graphics};
 
 use types::{Color, Radius, Rectangle, Resolution, Scalar};
 
@@ -68,33 +68,39 @@ impl CircleArc {
 
     /// Draws circle arc using default method.
     #[inline(always)]
-    pub fn draw<R: Into<Rectangle>, G>(&self,
-                                       rectangle: R,
-                                       draw_state: &DrawState,
-                                       transform: Matrix2d,
-                                       g: &mut G)
-        where G: Graphics
+    pub fn draw<R: Into<Rectangle>, G>(
+        &self,
+        rectangle: R,
+        draw_state: &DrawState,
+        transform: Matrix2d,
+        g: &mut G,
+    ) where
+        G: Graphics,
     {
         g.circle_arc(self, rectangle, draw_state, transform);
     }
 
     /// Draws circle arc using triangulation.
-    pub fn draw_tri<R: Into<Rectangle>, G>(&self,
-                                           rectangle: R,
-                                           draw_state: &DrawState,
-                                           transform: Matrix2d,
-                                           g: &mut G)
-        where G: Graphics
+    pub fn draw_tri<R: Into<Rectangle>, G>(
+        &self,
+        rectangle: R,
+        draw_state: &DrawState,
+        transform: Matrix2d,
+        g: &mut G,
+    ) where
+        G: Graphics,
     {
         let rectangle = rectangle.into();
         g.tri_list(&draw_state, &self.color, |f| {
-            triangulation::with_arc_tri_list(self.start,
-                                             self.end,
-                                             self.resolution,
-                                             transform,
-                                             rectangle,
-                                             self.radius,
-                                             |vertices| f(vertices))
+            triangulation::with_arc_tri_list(
+                self.start,
+                self.end,
+                self.resolution,
+                transform,
+                rectangle,
+                self.radius,
+                |vertices| f(vertices),
+            )
         });
     }
 }

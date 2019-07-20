@@ -29,10 +29,12 @@ pub fn hex(hex: &str) -> Color {
         Some(a) => [rgb[0], rgb[1], rgb[2], a],
     };
     let inv_255 = 1.0f32 / 255.0f32;
-    [color[0] as f32 * inv_255,
-     color[1] as f32 * inv_255,
-     color[2] as f32 * inv_255,
-     color[3] as f32 * inv_255]
+    [
+        color[0] as f32 * inv_255,
+        color[1] as f32 * inv_255,
+        color[2] as f32 * inv_255,
+        color[3] as f32 * inv_255,
+    ]
 }
 
 #[inline(always)]
@@ -49,10 +51,12 @@ fn component_srgb_to_linear(f: ColorComponent) -> ColorComponent {
 /// sRGB is the default color space for image editors, pictures, internet etc.
 /// Linear gamma yields better results when doing math with colors.
 pub fn gamma_srgb_to_linear(c: Color) -> Color {
-    [component_srgb_to_linear(c[0]),
-     component_srgb_to_linear(c[1]),
-     component_srgb_to_linear(c[2]),
-     c[3]]
+    [
+        component_srgb_to_linear(c[0]),
+        component_srgb_to_linear(c[1]),
+        component_srgb_to_linear(c[2]),
+        c[3],
+    ]
 }
 
 #[inline(always)]
@@ -69,8 +73,10 @@ fn component_linear_to_srgb(f: ColorComponent) -> ColorComponent {
 /// sRGB is the default color space for image editors, pictures, internet etc.
 /// Linear gamma yields better results when doing math with colors.
 pub fn gamma_linear_to_srgb(c: Color) -> Color {
-    [component_linear_to_srgb(c[0]),
-     component_linear_to_srgb(c[1]),
-     component_linear_to_srgb(c[2]),
-     c[3]]
+    [
+        component_linear_to_srgb(c[0]),
+        component_linear_to_srgb(c[1]),
+        component_linear_to_srgb(c[2]),
+        c[3],
+    ]
 }

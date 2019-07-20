@@ -1,17 +1,18 @@
+use math::hsv;
+use radians::Radians;
 use types::{Color, ColorComponent};
 use {Ellipse, Line, Rectangle};
-use radians::Radians;
-use math::hsv;
 
 /// Implemented by contexts that contains color.
 pub trait Colored: Sized {
     /// Multiplies with red, green, blue and alpha values.
-    fn mul_rgba(self,
-                r: ColorComponent,
-                g: ColorComponent,
-                b: ColorComponent,
-                a: ColorComponent)
-                -> Self;
+    fn mul_rgba(
+        self,
+        r: ColorComponent,
+        g: ColorComponent,
+        b: ColorComponent,
+        a: ColorComponent,
+    ) -> Self;
 
     /// Mixes the current color with white.
     ///
@@ -43,12 +44,13 @@ pub trait Colored: Sized {
 
 impl Colored for Color {
     #[inline(always)]
-    fn mul_rgba(self,
-                r: ColorComponent,
-                g: ColorComponent,
-                b: ColorComponent,
-                a: ColorComponent)
-                -> Self {
+    fn mul_rgba(
+        self,
+        r: ColorComponent,
+        g: ColorComponent,
+        b: ColorComponent,
+        a: ColorComponent,
+    ) -> Self {
         [self[0] * r, self[1] * g, self[2] * b, self[3] * a]
     }
 
@@ -60,12 +62,13 @@ impl Colored for Color {
 
 impl Colored for Line {
     #[inline(always)]
-    fn mul_rgba(mut self,
-                r: ColorComponent,
-                g: ColorComponent,
-                b: ColorComponent,
-                a: ColorComponent)
-                -> Self {
+    fn mul_rgba(
+        mut self,
+        r: ColorComponent,
+        g: ColorComponent,
+        b: ColorComponent,
+        a: ColorComponent,
+    ) -> Self {
         self.color = self.color.mul_rgba(r, g, b, a);
         self
     }
@@ -79,12 +82,13 @@ impl Colored for Line {
 
 impl Colored for Ellipse {
     #[inline(always)]
-    fn mul_rgba(mut self,
-                r: ColorComponent,
-                g: ColorComponent,
-                b: ColorComponent,
-                a: ColorComponent)
-                -> Self {
+    fn mul_rgba(
+        mut self,
+        r: ColorComponent,
+        g: ColorComponent,
+        b: ColorComponent,
+        a: ColorComponent,
+    ) -> Self {
         self.color = self.color.mul_rgba(r, g, b, a);
         self
     }
@@ -98,12 +102,13 @@ impl Colored for Ellipse {
 
 impl Colored for Rectangle {
     #[inline(always)]
-    fn mul_rgba(mut self,
-                r: ColorComponent,
-                g: ColorComponent,
-                b: ColorComponent,
-                a: ColorComponent)
-                -> Self {
+    fn mul_rgba(
+        mut self,
+        r: ColorComponent,
+        g: ColorComponent,
+        b: ColorComponent,
+        a: ColorComponent,
+    ) -> Self {
         self.color = self.color.mul_rgba(r, g, b, a);
         self
     }
