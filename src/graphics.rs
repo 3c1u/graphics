@@ -111,6 +111,15 @@ pub trait Graphics: Sized {
                       f: F)
         where F: FnMut(&mut FnMut(&[[f32; 2]], &[[f32; 2]]));
 
+    /// Draws a series of triangles from IBO (index buffer object) using
+    /// a colour and a texture.
+    fn tri_list_uv_with_indices<F>(&mut self,
+                      draw_state: &DrawState,
+                      color: &[f32; 4],
+                      texture: &<Self as Graphics>::Texture,
+                      f: F)
+        where F: FnMut(&mut FnMut(&[[f32; 2]], &[[f32; 2]], &[u16]));
+
     /// Draws a rectangle.
     ///
     /// Can be overriden in the back-end for higher performance.
